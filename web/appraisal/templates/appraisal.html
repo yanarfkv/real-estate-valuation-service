@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="body-wrapper">
+        <div class="container mt-4 p-0">
+            <h1 class="mb-2">Отчет об оценке стоимости жилья</h1>
+            <h5 class="mb-5">от {{ property.created_at|date:"d.m.Y H:i:s" }}</h5>
+            <div class="card mb-2 shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <h4 class="mb-3">Прогнозируемая стоимость жилья составляет</h4>
+                                        <div class="card bg-primary-subtle shadow-sm">
+                                            <div class="card-body p-3">
+                                                <h3 class="text-primary mb-0">≈ {{ property.prediction }} руб.</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="d-flex mb-4" style="width: fit-content;">
+                                            <img class="me-2" src="{% static '/images/area-ison.svg' %}" alt="">
+                                            <div class="d-flex flex-column">
+                                                <small>Площадь</small>
+                                                <b>{{ property.total_area }} м²</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="d-flex mb-4" style="width: fit-content;">
+                                            <img class="me-2" src="{% static '/images/floor.svg' %}" alt="">
+                                            <div class="d-flex flex-column">
+                                                <small>Этаж</small>
+                                                <b>{{ property.floor }}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="d-flex mb-4" style="width: fit-content;">
+                                            <img class="me-2" src="{% static '/images/plan.svg' %}" alt="">
+                                            <div class="d-flex flex-column">
+                                                <small>Комнат</small>
+                                                {% if property.rooms >= 1 and property.rooms <= 3 %}
+                                                    <b>{{ property.rooms }}-комнатная</b>
+                                                {% elif property.rooms == 4 %}
+                                                    <b>4+ комнатная</b>
+                                                {% elif property.rooms == 0 %}
+                                                    <b>Студия</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="d-flex mb-4" style="width: fit-content;">
+                                            <img class="me-2" src="{% static '/images/build_year.svg' %}" alt="">
+                                            <div class="d-flex flex-column">
+                                                <small>Город</small>
+                                                <b>{{ property.city }}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="d-flex mb-4" style="width: fit-content;">
+                                            <img class="me-2" src="{% static '/images/kitchen.svg' %}" alt="">
+                                            <div class="d-flex flex-column">
+                                                <small>Ремонт</small>
+                                                {% if property.repair == '1' %}
+                                                    <b>Дизайнерский</b>
+                                                {% elif property.repair == '2' %}
+                                                    <b>Евроремонт</b>
+                                                {% elif property.repair == '3' %}
+                                                    <b>Косметический</b>
+                                                {% elif property.repair == '4' %}
+                                                    <b>Отсутствует</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="d-flex mb-4" style="width: fit-content;">
+                                            <img class="me-2" src="{% static '/images/area-ison.svg' %}" alt="">
+                                            <div class="d-flex flex-column">
+                                                <small>Тип</small>
+                                                {% if property.housing_type == '1' %}
+                                                    <b>Вторичка</b>
+                                                {% elif property.housing_type == '2' %}
+                                                    <b>Новостройка</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-7">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+
+                    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                    <script>
+                        var map = L.map('map').setView([{{ property.lat }}, {{ property.lon }}], 15);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '© OpenStreetMap'
+                        }).addTo(map);
+
+                        var marker = L.marker([{{ property.lat }}, {{ property.lon }}]).addTo(map);
+                        marker.bindPopup("{{ property.address }}").openPopup();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

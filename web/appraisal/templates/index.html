@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="body-wrapper">
+        <div class="container mt-4 p-0">
+            <h1 class="mb-2">Оценка стоимости жилья</h1>
+            <h5 class="mb-5">Введите данные об объекте, чтобы узнать стоимость жилья</h5>
+
+            <form method="post" action="{% url 'predict' %}">
+                {% csrf_token %}
+                <div class="card mb-2 shadow">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3 mb-3 position-relative">
+                                <div class="form-floating">
+                                    {{ form.address }}
+                                    <label for="{{ form.address.id_for_label }}">
+                                        <i class="ti ti-home me-2 fs-4"></i>Адрес
+                                    </label>
+                                    <div class="list-group" id="address-list"></div>
+                                </div>
+
+                            </div>
+                            <div class="col-3 mb-3">
+                                <div class="form-floating">
+                                    {{ form.total_area }}
+                                    <label for="{{ form.total_area.id_for_label }}">
+                                        <i class="ti ti-shape me-2 fs-4"></i>Площадь
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                {{ form.rooms }}
+                            </div>
+                            <div class="col-3 mb-3">
+                                <div class="row h-100">
+                                    {% for choice in form.housing_type %}
+                                    <div class="col-6">
+                                        <input type="radio" class="btn-check" name="{{ form.housing_type.html_name }}" id="{{ choice.id_for_label }}" value="{{ choice.data.value }}" {% if choice.data.selected %}checked{% endif %}>
+                                        <label class="btn btn-outline-dark d-flex justify-content-center align-items-center w-100 h-100" for="{{ choice.id_for_label }}">{{ choice.data.label }}</label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                {{ form.repair }}
+                            </div>
+                            <div class="col-3 mb-3">
+                                <div class="form-floating">
+                                    {{ form.floor }}
+                                    <label for="{{ form.floor.id_for_label }}">
+                                        <i class="ti ti-stairs me-2 fs-4"></i>Этаж
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                {{ form.house_type }}
+                            </div>
+                            <div class="col-3 mb-3">
+                                <button type="submit" class="btn btn-primary fs-4 w-100  p-3 px-4">
+                                    Перейти к оценке
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <style>
+                #address-list {
+                    z-index: 10;
+                    position: absolute;
+                    max-height: 300px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    width: 100%;
+                }
+                .select2 .select2-selection {
+                    min-width: 300px;
+                }
+            </style>
+
+
+            <script>
+                function debounce(func, timeout = 300){
+                    let timer;
+                    return (...args) => {
+                        clearTimeout(timer);
+                        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+                    };
+                }
+
+                function handleInput(e) {
+                    let value = e.target.value;
+                    if (value.length > 2) {
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURI(value)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('address-list').innerHTML = data.map(place => {
+                                    return `<a href="#" class="list-group-item list-group-item-action" data-coord="${place.lat},${place.lon}" onclick="selectAddress(event, '${place.display_name}')">${place.display_name}</a>`;
+                                }).join('');
+                            });
+                    } else {
+                        document.getElementById('address-list').innerHTML = '';
+                    }
+                }
+
+                function selectAddress(e, address) {
+                    e.preventDefault();
+                    document.getElementById('address').value = address;
+                    document.getElementById('address-list').innerHTML = '';
+                }
+
+                document.getElementById('address').addEventListener('input', debounce(handleInput, 500));
+            </script>
+
+            {% if messages %}
+            <ul class="messages text-danger mt-3">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Оценка жилья{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/select2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 255px; width: 100%; }
+    </style>
+</head>
+<body>
+    <header class="topbar card rounded-bottom-2 border-0 shadow-sm">
+        <div class="with-vertical">
+            <nav class="container navbar p-0">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+                    <img class="me-2" src="{% static 'images/logo.svg' %}" width="30" height="30" alt="">
+                    <h5 class="text-uppercase fw-bolder fs-2 mb-0">Оценка стоимости<br>жилья</h5>
+                </a>
+                {% if request.user.is_authenticated %}
+                    <div>
+                        <a href="{% url 'profile' %}" class="btn btn-outline-primary">
+                            <i class="ti ti-user me-2"></i>
+                            Личный кабинет
+                        </a>
+                    </div>
+                {% else %}
+                    <div>
+                        <a href="{% url 'register' %}" class="btn btn-primary me-1">Зарегистрироваться</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary">Войти</a>
+                    </div>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/simplebar.min.js' %}"></script>
+    <script src="{% static 'js/app.init.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/app.min.js' %}"></script>
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+
+    <script src="{% static 'js/select2.full.min.js' %}"></script>
+    <script src="{% static 'js/select2.init.js' %}"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
+
+    <script src="{% static 'js/validation.js' %}"></script>
+    <script src="{% static 'js/custom-validation-init.js' %}"></script>
+</body>
+</html>

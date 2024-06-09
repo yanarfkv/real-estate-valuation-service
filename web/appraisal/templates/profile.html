@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+    </style>
+    <div class="body-wrapper">
+        <div class="container mt-4 p-0">
+
+            <div class="mb-4">
+                <h2 class="mb-8">Личный кабинет</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a class="text-muted text-decoration-none" href="{% url 'index' %}">Главная</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">Личный кабинет</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="nav flex-column nav-pills mb-4 mb-md-0">
+                                <a class="nav-link active" href="{% url 'profile' %}">
+                                    <i class="ti ti-table me-2"></i> История запросов
+                                </a>
+                                <a class="nav-link" href="{% url 'settings' %}">
+                                    <i class="ti ti-settings me-2"></i> Настройки аккаунта
+                                </a>
+                                <a class="nav-link" href="{% url 'logout' %}">
+                                    <i class="ti ti-logout me-2"></i> Выйти
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h4 class="mb-4">История запросов оценки стоимости жилья</h4>
+                            <div class="table-responsive border rounded-1">
+                                <table class="table text-nowrap mb-0 align-middle">
+                                    <thead class="text-dark fs-4">
+                                        <tr>
+                                            <th>№</th>
+                                            <th>Адрес объекта</th>
+                                            <th>Дата оценки</th>
+                                            <th>Оценочная стоимость</th>
+                                            <th>Отчет</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for property in properties %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td style="text-wrap: balance;">{{ property.address }}</td>
+                                                <td>{{ property.created_at|date:"d.m.Y H:i:s" }}</td>
+                                                <td>{{ property.prediction }} руб.</td>
+                                                <td>
+                                                    <a href="{% url 'display_prediction' property.id %}" class="text-primary">
+                                                        <i class="ti ti-link"></i>
+                                                        Перейти
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

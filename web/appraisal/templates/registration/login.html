@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+</head>
+<body>
+<style>
+    body {
+        background: #f5f5f5;
+    }
+</style>
+    <header class="topbar card rounded-0 border-0 position-absolute border-0 bg-transparent shadow-none">
+        <nav class="container navbar p-0">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+                <img class="me-2" src="{% static 'images/logo.svg' %}" width="30" height="30" alt="">
+                <h5 class="text-uppercase fw-bolder fs-2 mb-0">Оценка стоимости<br>жилья</h5>
+            </a>
+        </nav>
+    </header>
+    <div class="position-relative overflow-hidden min-vh-100 w-100 d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center w-100">
+            <div class="row justify-content-center w-100">
+                <div class="col-md-8 col-lg-6 col-xxl-3 auth-card">
+                    <div class="card shadow mb-0">
+                        <div class="card-body">
+                            <div class="position-relative text-center my-4">
+                              <h3 class="mb-0 px-3 d-inline-block bg-body text-dark z-index-5 position-relative fw-bolder mb-2">Авторизация</h3>
+                            </div>
+                            <form method="post" action="">
+                                {% csrf_token %}
+
+                                <div class="form-floating mb-3 mb-1">
+                                    {{ form.username }}
+                                    <label for="{{ form.username.id_for_label }}"><i class="ti ti-user me-2 fs-4"></i> Логин</label>
+                                </div>
+                                {% for error in form.username.errors %}
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i class="ti ti-circle-x text-danger fs-1 me-2"></i>
+                                        <p class="text-danger fs-1 mb-0">{{ error }}</p>
+                                    </div>
+                                {% endfor %}
+
+                                <div class="form-floating mt-3 mb-1">
+                                    {{ form.password }}
+                                    <label for="{{ form.password.id_for_label }}"><i class="ti ti-lock me-2 fs-4"></i> Пароль</label>
+                                </div>
+                                {% for error in form.password.errors %}
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i class="ti ti-circle-x text-danger fs-1 me-2"></i>
+                                        <p class="text-danger fs-1 mb-0">{{ error }}</p>
+                                    </div>
+                                {% endfor %}
+
+                                {{ form.non_field_errors }}
+
+                                <button type="submit" class="btn btn-lg btn-primary w-100 py-8 mb-4 mt-3 rounded-2">Войти</button>
+                            </form>
+
+                            <div class="d-flex align-items-center justify-content-center mb-4">
+                                <p class="fs-4 mb-0 fw-medium">Нет аккаунта?</p>
+                                <a class="text-primary fw-medium ms-2" href="{% url 'register' %}">Зарегистрироваться</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

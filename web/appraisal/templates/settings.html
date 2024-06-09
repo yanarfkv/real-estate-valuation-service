@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+    </style>
+    <div class="body-wrapper">
+        <div class="container mt-4 p-0">
+
+            <div class="mb-4">
+                <h2 class="mb-8">Личный кабинет</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a class="text-muted text-decoration-none" href="{% url 'index' %}">Главная</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">Личный кабинет</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="nav flex-column nav-pills mb-4 mb-md-0">
+                                <a class="nav-link" href="{% url 'profile' %}">
+                                    <i class="ti ti-table me-2"></i> История запросов
+                                </a>
+                                <a class="nav-link active" href="{% url 'settings' %}">
+                                    <i class="ti ti-settings me-2"></i> Настройки аккаунта
+                                </a>
+                                <a class="nav-link" href="{% url 'logout' %}">
+                                    <i class="ti ti-logout me-2"></i> Выйти
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h4 class="mb-4">Настройки аккаунта</h4>
+
+                            <div class="row mb-4">
+                                <h5 class="mb-3">Изменение пароля</h5>
+                                <div class="d-flex justify-content-between">
+                                    <div class="form-floating w-100 me-2">
+                                        <input id="oldPassword" type="text" class="form-control" placeholder="Текущий пароль">
+                                        <label for="oldPassword">
+                                            <span>Текущий пароль</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-floating w-100 me-2">
+                                        <input id="password" type="text" class="form-control" placeholder="Новый пароль">
+                                        <label for="password">
+                                            <span>Новый пароль</span>
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-primary">Сохранить</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="mb-3">Удаление аккаунта</h5>
+                                <div class="alert alert-danger d-flex align-items-center justify-content-between mb-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="ti ti-alert-circle text-danger lead me-3"></i>
+                                        <div>
+                                            <h5>Внимание!</h5>
+                                            <span>При удалении аккаунта вы потеряете все данные</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger">Удалить аккаунт</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
